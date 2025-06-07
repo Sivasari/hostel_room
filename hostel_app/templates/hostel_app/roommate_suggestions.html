@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roommate Suggestions</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #f0f4c3, #f1f8e9);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #33691e;
+      margin-bottom: 25px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    li {
+      background-color: #ffffff;
+      margin-bottom: 12px;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+      font-size: 15px;
+      color: #444;
+    }
+
+    p {
+      text-align: center;
+      color: #777;
+      font-style: italic;
+      font-size: 16px;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      color: #1b5e20;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Suggested Roommates in {{ room.hostel.name }} - Room {{ room.room_number }}</h2>
+
+  {% if suggestions %}
+    <ul>
+      {% for mate in suggestions %}
+        <li>
+          {{ mate.user.username }} — {{ mate.department }}, Year {{ mate.year }}<br>
+          Roll No: {{ mate.roll_number }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No matching roommates found yet.</p>
+  {% endif %}
+
+  <a href="{% url 'student_dashboard' %}">← Back to Dashboard</a>
+
+</body>
+</html>

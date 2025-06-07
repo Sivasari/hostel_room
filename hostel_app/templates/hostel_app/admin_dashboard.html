@@ -1,0 +1,101 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Booking Requests</title>
+  <style>
+    body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+              url("{% static 'images/admin.jpg' %}") no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+    h2 {
+      text-align: center;
+      color:blue;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color:green;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .card p {
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    .card form {
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+    }
+
+    .card button {
+      background-color: #2ecc71;
+      border: none;
+      padding: 8px 14px;
+      color:blue;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .card button[name="action"][value="reject"] {
+      background-color:black;
+    }
+
+    .card button:hover {
+      opacity: 0.9;
+    }
+
+    .no-data {
+      text-align: center;
+      color:black;
+      font-size: 16px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Admin Panel: Booking Requests</h2>
+
+  {% for request in requests %}
+    <div class="card">
+      <p><strong>Student:</strong> {{ request.student.user.username }} ({{ request.student.roll_number }})</p>
+      <p><strong>Room Requested:</strong> {{ request.preferred_room.hostel.name }} - {{ request.preferred_room.room_number }}</p>
+      <p><strong>Status:</strong> {{ request.status }}</p>
+
+      {% if request.status == "Pending" %}
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="request_id" value="{{ request.id }}">
+          <button type="submit" name="action" value="approve">Approve</button>
+          <button type="submit" name="action" value="reject">Reject</button>
+        </form>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="no-data">No booking requests yet.</p>
+  {% endfor %}
+
+</body>
+</html>

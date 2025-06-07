@@ -1,0 +1,96 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify Payments</title>
+  <style>
+    body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+              url("{% static 'images/verify.jpg' %}") no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+    h2 {
+      text-align: center;
+      color:blue;
+      margin-bottom: 30px;
+    }
+
+    .payment-card {
+      background-color: #fff;
+      border-left: 6px solid #66bb6a;
+      padding: 20px;
+      margin: 10px auto;
+      border-radius: 10px;
+      max-width: 600px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .payment-card p {
+      margin: 6px 0;
+      font-size: 15px;
+      color: #333;
+    }
+
+    .payment-card strong {
+      color: #444;
+    }
+
+    .payment-card form {
+      margin-top: 10px;
+    }
+
+    .payment-card button {
+      background-color: #388e3c;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+    }
+
+    .payment-card button:hover {
+      background-color: #2e7d32;
+    }
+
+    .no-data {
+      text-align: center;
+      font-style: italic;
+      color: #777;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Verify Payments</h2>
+
+  {% for payment in payments %}
+    <div class="payment-card">
+      <p><strong>Student:</strong> {{ payment.student.user.username }}</p>
+      <p><strong>Amount:</strong> ₹{{ payment.amount }}</p>
+      <p><strong>Status:</strong> {{ payment.status }}</p>
+      <p><strong>Date:</strong> {{ payment.date }}</p>
+
+      {% if payment.status == "Pending" %}
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="payment_id" value="{{ payment.id }}">
+          <button type="submit">Mark as Paid</button>
+        </form>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="no-data">No payments yet.</p>
+  {% endfor %}
+</body>
+</html>
